@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MartianRobots.Cli/MartianRobots.Cli.csproj" />
+    <Project Path="src/MartianRobots.Core/MartianRobots.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MartianRobots.Tests/MartianRobots.Tests.csproj" />
+  </Folder>
+</Solution>
