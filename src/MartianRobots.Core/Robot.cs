@@ -2,8 +2,8 @@
 
 public class Robot
 {
-    public int X { get; }
-    public int Y { get; }
+    public int X { get; private set; }
+    public int Y { get; private set; }
     public Orientation Orientation { get; private set; }
 
     public Robot(int x, int y, Orientation orientation)
@@ -35,5 +35,23 @@ public class Robot
             Orientation.West => Orientation.North,
             _ => throw new InvalidOperationException()
         };
+    }
+
+    public void MoveForward(World world)
+    {
+        var (nextX, nextY) = Orientation switch
+        {
+            Orientation.North => (X, Y + 1),
+            Orientation.East => (X + 1, Y),
+            Orientation.South => (X, Y - 1),
+            Orientation.West => (X - 1, Y),
+            _ => throw new InvalidOperationException()
+        };
+
+        if (world.Contains(nextX, nextY))
+        {
+            X = nextX;
+            Y = nextY;
+        }
     }
 }

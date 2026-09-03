@@ -2,7 +2,7 @@ using MartianRobots.Core;
 
 namespace MartianRobots.Tests;
 
-public class RobotRotationTests
+public class RotationTests
 {
     [Theory]
     [InlineData(Orientation.North, Orientation.West)]
