@@ -25,15 +25,19 @@ The supported instructions are:
 - `R` : the robot turns right 90 degrees andv remains on the current grid point.
 - `F` : the robot moves forward one grid point in the direction of the current orientation and maintains the same orientation.
 
-The world has a lower-left coordinate of `(0, 0)` and an upper-right coordinate supplied as input.
+The world starts at `(0, 0)` and the upper-right coordinate is supplied as input.
 
-Robots are processed one at a time. If a robot attempts to move beyond the boundary of the world, it is considered `LOST` and stops processing further instructions.
+Robots are processed one at a time.
 
-When a robot is lost, it leaves a scent at the last valid grid position it occupied. If a later robot is at that same position and receives a forward instruction that would also cause it to fall off the world, that instruction is ignored and the robot continues processing the rest of its instructions.
+If a robot tries to move beyond the edge of the world, it becomes `LOST` and stops processing any further instructions.
 
-For each robot, the program must return its final position and orientation, and indicate whether it was lost.
+When a robot is lost, it leaves a scent at the last valid grid position it occupied.
 
-The challenge also calls out that additional command types may be required in future, so the implementation should allow commands to be extended without adding unnecessary complexity.
+If another robot later reaches that same position and receives a forward instruction that would make it fall off the world, that instruction is ignored and the robot carries on with the rest of its instructions.
+
+For each robot, the program needs to return its final position and orientation and indicate whether it was lost.
+
+The challenge also mentions that new command types may be required in the future, so I wanted to leave a simple way of adding commands without making the rest of the solution more complicated.
 
 ## Acceptance criteria
 
@@ -59,3 +63,107 @@ From the acceptance criteria above, I identified four main responsibilities:
 - `Simulator` : processes robots and their instructions sequentially
 
 Input parsing and output formatting should be kept separate from the core domain logic so that the acceptance criteria can be tested without going through the console application.
+
+## Solution Structure
+
+I kept the architecture simple for the size of the problem.
+
+The solution is split into:
+
+- `MartianRobots.Core` — contains the domain behaviour, world state, commands, input model, and simulation logic;
+- `MartianRobots.Cli` — handles console/file input and writes the result;
+- `MartianRobots.Tests` — contains the unit and acceptance tests.
+
+I did not use a full Clean Architecture approach because, for a problem of this size, it would have felt like using a bazooka to kill a fly. I wanted enough structure to keep responsibilities clear without adding unnecessary ceremony.
+
+Instead, I focused on keeping the domain logic independent from the CLI and input/output concerns so that the core behaviour remains easy to test and change.
+
+## Running the solution
+
+### Prerequisites
+
+- .NET 9 SDK
+
+Confirm the SDK with:
+
+```bash
+dotnet --version
+```
+
+Build
+From the repository root:
+
+```bash
+dotnet build
+```
+
+Run the tests
+
+```bash
+dotnet test
+```
+
+Run using an input file
+```bash
+dotnet run --project src/MartianRobots.Cli -- examples/testdata.txt
+```
+
+Using the supplied sample data, the expected output is:
+```text
+1 1 E
+3 3 N LOST
+2 3 S
+```
+
+## Design decisions
+
+I kept the solution intentionally simple inline with my interpretation of KISS. 
+
+### Robot
+
+The `Robot` class owns the current position, orientation and lost state.
+
+### World
+
+The `World` class owns the grid bounds and the scents left by lost robots.
+
+Scents belong to the world, not to a robot, because they must persist while robots are processed one after another.
+
+### Commands
+
+The assesment requirments notes that additional command types may be required later.
+
+To support this without introducing unnecessary complexity, I implemented a small `ICommand` interface together with a `CommandFactory`. 
+
+Current commands:
+
+- LeftCommand
+- RightCommand
+- ForwardCommand
+
+A new command would then need a new ICommand and a factory registration. The simulator does not change.
+
+### ChallengeInputReader
+
+`ChallengeInputReader` only turns the supplied text format into structured input.
+
+Keeping that separate from simulation means domain behaviour can be tested without the console or a file.
+
+### Simulator
+
+`Simulator` coordinates execution.
+
+It creates one `World` and processes each robot in order. The shared world is what makes earlier scents visible to later robots.
+
+Once a robot is `LOST`, the simulator stops giving it instructions.
+
+### CLI
+
+The command-line project is thin. It only:
+
+- reads input from a file
+- passes that input to `ChallengeInputReader`
+- runs the simulation
+- writes the resulting positions
+
+Domain logic stays in `MartianRobots.Core`
