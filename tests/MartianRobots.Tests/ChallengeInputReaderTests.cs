@@ -14,7 +14,7 @@ public class ChallangeInputReaderTests
             "RFRFRFRF"
         };
 
-        var parser = new ChallangeInputReader();
+        var parser = new ChallengeInputReader();
 
         var result = parser.Parse(input);
 
@@ -32,7 +32,7 @@ public class ChallangeInputReaderTests
             "RFRFRFRF"
         };
 
-        var parser = new ChallangeInputReader();
+        var parser = new ChallengeInputReader();
 
         var result = parser.Parse(input);
 
@@ -56,7 +56,7 @@ public class ChallangeInputReaderTests
         "FRRFLLFFRRFLL"
     };
 
-        var parser = new ChallangeInputReader();
+        var parser = new ChallengeInputReader();
 
         var result = parser.Parse(input);
 
