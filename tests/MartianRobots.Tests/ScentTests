@@ -1,0 +1,28 @@
+using MartianRobots.Core;
+
+namespace MartianRobots.Tests;
+
+public class ScentTests
+{
+    [Fact]
+    public void LostRobot_LeavesScentAtLastValidPosition()
+    {
+        var world = new World(5, 3);
+        var robot = new Robot(5, 3, Orientation.North);
+
+        robot.MoveForward(world);
+
+        Assert.True(world.HasScent(5, 3));
+    }
+
+    [Fact]
+    public void ValidMove_DoesNotLeaveScent()
+    {
+        var world = new World(5, 3);
+        var robot = new Robot(1, 1, Orientation.North);
+
+        robot.MoveForward(world);
+
+        Assert.False(world.HasScent(1, 1));
+    }
+}

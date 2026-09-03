@@ -53,6 +53,7 @@ public class Robot
 
         if (!world.Contains(nextX, nextY))
         {
+            world.LeaveScent(X, Y);
             Lost = true;
             return;
         }
