@@ -11,7 +11,7 @@ public sealed record ProblemInput(
     int MaxY,
     IReadOnlyList<RobotInput> Robots);
 
-    public class ChallangeInputReader
+public class ChallangeInputReader
 {
     public ProblemInput Parse(IEnumerable<string> lines)
     {
