@@ -4,6 +4,9 @@ public class Robot
 {
     public int X { get; private set; }
     public int Y { get; private set; }
+    public bool Lost { get; private set; }
+
+
     public Orientation Orientation { get; private set; }
 
     public Robot(int x, int y, Orientation orientation)
@@ -48,10 +51,14 @@ public class Robot
             _ => throw new InvalidOperationException()
         };
 
-        if (world.Contains(nextX, nextY))
+        if (!world.Contains(nextX, nextY))
         {
-            X = nextX;
-            Y = nextY;
+            Lost = true;
+            return;
         }
+
+        X = nextX;
+        Y = nextY;
+
     }
 }
