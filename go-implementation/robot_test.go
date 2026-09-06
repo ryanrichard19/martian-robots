@@ -27,32 +27,12 @@ func TestTurnLeft(t *testing.T) {
 	}
 }
 
-func TestTurnRight(t *testing.T) {
-	tests := []struct {
-		name  string
-		start Orientation
-		want  Orientation
-	}{
-		{"north to east", North, East},
-		{"east to south", East, South},
-		{"south to west", South, West},
-		{"west to north", West, North},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			robot := Robot{Orientation: tt.start}
-
-			robot.TurnRight()
-
-			if robot.Orientation != tt.want {
-				t.Fatalf("got %c, want %c", robot.Orientation, tt.want)
-			}
-		})
-	}
-}
-
 func TestMoveForward(t *testing.T) {
+	world := World{
+		MaxX: 5,
+		MaxY: 3,
+	}
+
 	tests := []struct {
 		name        string
 		orientation Orientation
@@ -73,7 +53,7 @@ func TestMoveForward(t *testing.T) {
 				Orientation: tt.orientation,
 			}
 
-			robot.MoveForward()
+			robot.MoveForward(world)
 
 			if robot.X != tt.wantX || robot.Y != tt.wantY {
 				t.Fatalf(

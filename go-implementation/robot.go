@@ -41,15 +41,24 @@ func (r *Robot) TurnRight() {
 	}
 }
 
-func (r *Robot) MoveForward() {
+func (r *Robot) MoveForward(world World) {
+	nextX, nextY := r.X, r.Y
+
 	switch r.Orientation {
 	case North:
-		r.Y++
+		nextY++
 	case East:
-		r.X++
+		nextX++
 	case South:
-		r.Y--
+		nextY--
 	case West:
-		r.X--
+		nextX--
 	}
+
+	if !world.Contains(nextX, nextY) {
+		return
+	}
+
+	r.X = nextX
+	r.Y = nextY
 }
