@@ -13,6 +13,7 @@ type Robot struct {
 	X           int
 	Y           int
 	Orientation Orientation
+	Lost        bool
 }
 
 func (r *Robot) TurnLeft() {
@@ -41,7 +42,7 @@ func (r *Robot) TurnRight() {
 	}
 }
 
-func (r *Robot) MoveForward(world World) {
+func (r *Robot) MoveForward(world *World) {
 	nextX, nextY := r.X, r.Y
 
 	switch r.Orientation {
@@ -56,6 +57,12 @@ func (r *Robot) MoveForward(world World) {
 	}
 
 	if !world.Contains(nextX, nextY) {
+		if world.HasScent(r.X, r.Y) {
+			return
+		}
+
+		world.LeaveScent(r.X, r.Y)
+		r.Lost = true
 		return
 	}
 

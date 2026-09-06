@@ -167,3 +167,12 @@ The command-line project is thin. It only:
 - writes the resulting positions
 
 Domain logic stays in `MartianRobots.Core`
+
+
+## Bonus: Go Implementation
+
+I enjoyed the challenge enough that I ended up reimplementing it in Go as a small Sunday kata.
+
+I kept the Go version deliberately simple and idiomatic rather than copying the .NET design.
+
+See [`go-implementation`](./go-implementation).

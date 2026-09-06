@@ -28,10 +28,7 @@ func TestTurnLeft(t *testing.T) {
 }
 
 func TestMoveForward(t *testing.T) {
-	world := World{
-		MaxX: 5,
-		MaxY: 3,
-	}
+	world := NewWorld(5, 3)
 
 	tests := []struct {
 		name        string
